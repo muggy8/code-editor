@@ -1,7 +1,9 @@
 const 
 	path = require("path"),
 	fs = require("fs"),
-	http = require("http")
+	http = require("http"),
+	opn = require("opn"),
+	port = Math.round(Math.random() * 8000) + 1000
 
 function makePromise(called){
 	var callingArgs = []
@@ -21,3 +23,13 @@ function makePromise(called){
 		called.apply(context, callingArgs)
 	})
 }
+
+var server = http.createServer(function(req, res){
+	res.write("hello world")
+	
+	res.end()
+})
+
+server.listen(port)
+opn("http://localhost:" + port + "/")
+console.log("server is listening on port", port)
