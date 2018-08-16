@@ -1,26 +1,26 @@
 {
-  "name": "@muggy8/code-editor",
-  "version": "0.0.0",
-  "description": "a Node based web code editor for those who are looking to wite code using a GUI but do not have many options because of compatibility or other reasons",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/muggy8/code-editor.git"
-  },
-  "keywords": [
-    "code",
-    "browser"
-  ],
-  "author": "Muggy Ate",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/muggy8/code-editor/issues"
-  },
-  "homepage": "https://github.com/muggy8/code-editor#readme",
-  "dependencies": {
-    "ace-code-editor": "^1.2.3"
-  }
+    "name": "@muggy8/code-editor",
+    "version": "0.0.0",
+    "description": "a Node based web code editor for those who are looking to wite code using a GUI but do not have many options because of compatibility or other reasons",
+    "main": "cli.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/muggy8/code-editor.git"
+    },
+    "keywords": [
+        "code",
+        "browser"
+    ],
+    "author": "Muggy Ate",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/muggy8/code-editor/issues"
+    },
+    "homepage": "https://github.com/muggy8/code-editor#readme",
+    "dependencies": {
+        "ace-code-editor": "git+https://github.com/ajaxorg/ace-builds.git"
+    }
 }
