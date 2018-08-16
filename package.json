@@ -19,5 +19,8 @@
   "bugs": {
     "url": "https://github.com/muggy8/code-editor/issues"
   },
-  "homepage": "https://github.com/muggy8/code-editor#readme"
+  "homepage": "https://github.com/muggy8/code-editor#readme",
+  "dependencies": {
+    "ace-code-editor": "^1.2.3"
+  }
 }
