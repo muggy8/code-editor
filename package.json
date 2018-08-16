@@ -21,6 +21,6 @@
     },
     "homepage": "https://github.com/muggy8/code-editor#readme",
     "dependencies": {
-        "ace-code-editor": "git+https://github.com/ajaxorg/ace-builds.git"
+        "ace-builds": "git+https://github.com/ajaxorg/ace-builds.git"
     }
 }
