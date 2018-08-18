@@ -5,7 +5,10 @@ const
 	fs = require("fs"),
 	http = require("http"),
 	opn = require("opn"),
-	port = Math.round(Math.random() * 8000) + 1000
+	port = Math.round(Math.random() * 8000) + 1000,
+	editorFile = fs.readFileSync("./gui.html", "utf8").replace(/<script[^>]+src=\"([^\"]+)\"[^>]*>/g, function(matched, src){
+		return "<script>" + fs.readFileSync(src, "utf8")
+	})
 
 function makePromise(called){
 	var callingArgs = []
@@ -27,7 +30,7 @@ function makePromise(called){
 }
 
 var server = http.createServer(function(req, res){
-	res.write("hello world")
+	res.write(editorFile)
 
 	res.end()
 })
