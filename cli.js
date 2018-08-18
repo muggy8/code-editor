@@ -6,9 +6,12 @@ const
 	http = require("http"),
 	opn = require("opn"),
 	port = Math.round(Math.random() * 8000) + 1000,
+	url = require('url'),
+	querystring = require('querystring'),
 	editorFile = fs.readFileSync("./gui.html", "utf8").replace(/<script[^>]+src=\"([^\"]+)\"[^>]*>/g, function(matched, src){
 		return "<script>" + fs.readFileSync(src, "utf8")
-	})
+	}),
+	processPath = process.cwd()
 
 function makePromise(called){
 	var callingArgs = []
@@ -30,6 +33,10 @@ function makePromise(called){
 }
 
 var server = http.createServer(function(req, res){
+	var parsedUrl = url.parse(req.url)
+	if (parsedUrl.query){
+		var requestQuery = querystring.parse(parsedUrl.query)
+	}
 	res.write(editorFile)
 
 	res.end()
