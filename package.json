@@ -23,5 +23,8 @@
     "dependencies": {
         "ace-builds": "git+https://github.com/ajaxorg/ace-builds.git",
         "opn": "^5.3.0"
-    }
+    },
+	"bin": {
+		"editor": "./cli.js"
+	}
 }
