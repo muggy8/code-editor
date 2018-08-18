@@ -22,9 +22,11 @@
     "homepage": "https://github.com/muggy8/code-editor#readme",
     "dependencies": {
         "ace-builds": "git+https://github.com/ajaxorg/ace-builds.git",
-        "opn": "^5.3.0"
+        "opn": "^5.3.0",
+        "querystring": "^0.2.0",
+        "url": "^0.11.0"
     },
-	"bin": {
-		"editor": "./cli.js"
-	}
+    "bin": {
+        "editor": "./cli.js"
+    }
 }
