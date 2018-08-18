@@ -1,4 +1,4 @@
-const 
+const
 	path = require("path"),
 	fs = require("fs"),
 	http = require("http"),
@@ -26,10 +26,14 @@ function makePromise(called){
 
 var server = http.createServer(function(req, res){
 	res.write("hello world")
-	
+
 	res.end()
 })
 
 server.listen(port)
-opn("http://localhost:" + port + "/")
-console.log("server is listening on port", port)
+opn("http://localhost:" + port + "/").then(function(){
+	console.log("server is listening on port", port)
+}, function(){
+	console.log("failed to open default browser. Script terminated")
+	server.close()
+})
