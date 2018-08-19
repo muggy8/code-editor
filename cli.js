@@ -8,6 +8,7 @@ const
 	port = Math.round(Math.random() * 8000) + 1000,
 	url = require('url'),
 	querystring = require('querystring'),
+	escape = require('escape-html'),
 	editorFile = fs.readFileSync("./gui.html", "utf8").replace(/<script[^>]+src=\"([^\"]+)\"[^>]*>/g, function(matched, src){
 		return "<script>" + fs.readFileSync(src, "utf8")
 	}),
@@ -43,6 +44,7 @@ async function onGet(req, res){
 		var stats = await makePromise(fs.stat, processPath + parsedUrl.pathname)
 		if (stats.isFile()){
 			content = await makePromise(fs.readFile, processPath + parsedUrl.pathname, 'utf8')
+			content = escape(content)
 		}
 		else {
 			content = ""
