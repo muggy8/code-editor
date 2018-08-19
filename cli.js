@@ -10,10 +10,6 @@ const
 	querystring = require('querystring'),
 	escape = require('escape-html'),
 	mime = require('mime-types'),
-	typeFilePlaceholder = "/* type-file script to be inserted here */"
-	editorFile = fs.readFileSync("./gui.html", "utf8").replace(/<script[^>]+src=\"([^\"]+)\"[^>]*>/g, function(matched, src){
-		return "<script>" + fs.readFileSync(src, "utf8") + "\n" + typeFilePlaceholder
-	}),
 	processPath = process.cwd()
 
 function makePromise(called){
@@ -41,8 +37,8 @@ async function onGet(req, res){
 		var requestQuery = querystring.parse(parsedUrl.query)
 	}
 
-	var editorPage = editorFile,
-		content = ""
+	var content = "", 
+		editorPage = await makePromise(fs.readFile, "./gui.html", "utf8")
 	try{
 		var stats = await makePromise(fs.stat, processPath + parsedUrl.pathname)
 		if (stats.isFile()){
@@ -51,11 +47,7 @@ async function onGet(req, res){
 
 			var mimeType = mime.lookup(processPath + parsedUrl.pathname)
 			var modeType = mimeType && mimeType.split("/")[1]
-			// var modeTypeScript = await makePromise(fs.readFile, "./node_modules/ace-builds/src-min-noconflict/mode-" + modeType + ".js", "utf8")
-			// modeTypeScript && (editorPage = editorPage.replace(typeFilePlaceholder, function(){
-			// 	return modeTypeScript + "\nvar modeType = '" + modeType + "';"
-			// }))
-			modeType && (editorPage = editorPage.replace(typeFilePlaceholder, "var modeType = '" + modeType + "';\n"))
+			modeType && (editorPage = editorPage.replace("<body>", `<body data-content-type="${modeType}">`))
 		}
 	}
 	catch(o3o){
