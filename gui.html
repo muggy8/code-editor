@@ -29,7 +29,7 @@
 	<script>
 		var editor = ace.edit("editor")
 		editor.setTheme("ace/theme/textmate");
-    	// editor.session.setMode("ace/mode/javascript");
+    	typeof modeType !== "undefined" && editor.session.setMode("ace/mode/" + modeType);
 	</script>
 	</body>
 </html>

@@ -9,8 +9,10 @@ const
 	url = require('url'),
 	querystring = require('querystring'),
 	escape = require('escape-html'),
+	mime = require('mime-types'),
+	typeFilePlaceholder = "/* type-file script to be inserted here */"
 	editorFile = fs.readFileSync("./gui.html", "utf8").replace(/<script[^>]+src=\"([^\"]+)\"[^>]*>/g, function(matched, src){
-		return "<script>" + fs.readFileSync(src, "utf8")
+		return "<script>" + fs.readFileSync(src, "utf8") + "\n" + typeFilePlaceholder
 	}),
 	processPath = process.cwd()
 
@@ -39,29 +41,36 @@ async function onGet(req, res){
 		var requestQuery = querystring.parse(parsedUrl.query)
 	}
 
-	var editorPage, content
+	var editorPage = editorFile,
+		content = ""
 	try{
 		var stats = await makePromise(fs.stat, processPath + parsedUrl.pathname)
 		if (stats.isFile()){
 			content = await makePromise(fs.readFile, processPath + parsedUrl.pathname, 'utf8')
 			content = escape(content)
-		}
-		else {
-			content = ""
+
+			var mimeType = mime.lookup(processPath + parsedUrl.pathname)
+			var modeType = mimeType && mimeType.split("/")[1]
+			var modeTypeScript = await makePromise(fs.readFile, "./node_modules/ace-builds/src-min-noconflict/mode-" + modeType + ".js", "utf8")
+			modeTypeScript && (editorPage = editorPage.replace(typeFilePlaceholder, function(){
+				return modeTypeScript + "\nvar modeType = '" + modeType + "';"
+			}))
 		}
 	}
 	catch(o3o){
-		content = ""
+		// meh whatever
+		console.log("request for " + req.url + " failed because ", o3o)
 	}
 
 
 	if (requestQuery && requestQuery.list){
-		editorPage = editorFile
+		// editorPage = editorFile
 	}
 	else {
-		editorPage = editorFile.replace(/(<div id\=\"editor\">)(<\/div>)/, function(matched, open, closed){
+		editorPage = editorPage.replace(/(<div id\=\"editor\">)(<\/div>)/, function(matched, open, closed){
 			return open + content + closed
 		})
+
 	}
 	res.write(editorPage)
 
