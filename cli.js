@@ -51,10 +51,11 @@ async function onGet(req, res){
 
 			var mimeType = mime.lookup(processPath + parsedUrl.pathname)
 			var modeType = mimeType && mimeType.split("/")[1]
-			var modeTypeScript = await makePromise(fs.readFile, "./node_modules/ace-builds/src-min-noconflict/mode-" + modeType + ".js", "utf8")
-			modeTypeScript && (editorPage = editorPage.replace(typeFilePlaceholder, function(){
-				return modeTypeScript + "\nvar modeType = '" + modeType + "';"
-			}))
+			// var modeTypeScript = await makePromise(fs.readFile, "./node_modules/ace-builds/src-min-noconflict/mode-" + modeType + ".js", "utf8")
+			// modeTypeScript && (editorPage = editorPage.replace(typeFilePlaceholder, function(){
+			// 	return modeTypeScript + "\nvar modeType = '" + modeType + "';"
+			// }))
+			modeType && (editorPage = editorPage.replace(typeFilePlaceholder, "var modeType = '" + modeType + "';\n"))
 		}
 	}
 	catch(o3o){
@@ -73,13 +74,39 @@ async function onGet(req, res){
 
 	}
 	res.write(editorPage)
+	res.end()
+}
 
+async function getNodeModule(req, res){
+	var parsedUrl = url.parse(req.url)
+	try{
+		var asset = await makePromise(fs.readFile, parsedUrl.pathname.replace(/^\/@\//, "./node_modules/"), "utf8");
+	}
+	catch (o3o){
+		res.writeHead(404, { 'Content-Type': 'text/plain' })
+		res.write("404 not found")
+		res.end()
+		// console.log("cannot find ./node_modules" + parsedUrl.pathname)
+		return
+	}
+
+	res.writeHead(200, { 'Content-Type': mime.lookup(parsedUrl.pathname) })
+	res.write(asset)
 	res.end()
 }
 
 var server = http.createServer(function(req, res){
+
+	console.log("new request", req.url)
+
 	if (req.method === "GET"){
-		return onGet(req, res)
+		var parsedUrl = url.parse(req.url)
+		if (parsedUrl.pathname && parsedUrl.pathname.substring(0, 3) === "/@/") {
+			return getNodeModule(req, res)
+		}
+		else {
+			return onGet(req, res)
+		}
 	}
 })
 

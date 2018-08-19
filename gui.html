@@ -27,6 +27,7 @@
 			<div id="editor"></div>
 		</main>
 	<script>
+		ace.config.set('basePath', '@/ace-builds/src-min-noconflict')
 		var editor = ace.edit("editor")
 		editor.setTheme("ace/theme/textmate");
     	typeof modeType !== "undefined" && editor.session.setMode("ace/mode/" + modeType);
