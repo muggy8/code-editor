@@ -32,14 +32,44 @@ function makePromise(called){
 	})
 }
 
-var server = http.createServer(function(req, res){
+async function onGet(req, res){
 	var parsedUrl = url.parse(req.url)
 	if (parsedUrl.query){
 		var requestQuery = querystring.parse(parsedUrl.query)
 	}
-	res.write(editorFile)
+
+	var editorPage, content
+	try{
+		var stats = await makePromise(fs.stat, processPath + parsedUrl.pathname)
+		if (stats.isFile()){
+			content = await makePromise(fs.readFile, processPath + parsedUrl.pathname, 'utf8')
+		}
+		else {
+			content = ""
+		}
+	}
+	catch(o3o){
+		content = ""
+	}
+
+
+	if (requestQuery && requestQuery.list){
+		editorPage = editorFile
+	}
+	else {
+		editorPage = editorFile.replace(/(<div id\=\"editor\">)(<\/div>)/, function(matched, open, closed){
+			return open + content + closed
+		})
+	}
+	res.write(editorPage)
 
 	res.end()
+}
+
+var server = http.createServer(function(req, res){
+	if (req.method === "GET"){
+		return onGet(req, res)
+	}
 })
 
 server.listen(port)
