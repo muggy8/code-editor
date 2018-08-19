@@ -37,7 +37,7 @@ async function onGet(req, res){
 		var requestQuery = querystring.parse(parsedUrl.query)
 	}
 
-	var content = "", 
+	var content = "",
 		editorPage = await makePromise(fs.readFile, "./gui.html", "utf8")
 	try{
 		var stats = await makePromise(fs.stat, processPath + parsedUrl.pathname)
@@ -63,7 +63,6 @@ async function onGet(req, res){
 		editorPage = editorPage.replace(/(<div id\=\"editor\">)(<\/div>)/, function(matched, open, closed){
 			return open + content + closed
 		})
-
 	}
 	res.write(editorPage)
 	res.end()
