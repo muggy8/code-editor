@@ -38,7 +38,7 @@ async function renderFsListing(targetPath){
 	})
 	fsListStats = await Promise.all(fsList.map(function(path){
 		var target = targetPath + "/" + path
-		return makePromise(fs.stat, target).then(function(stat){
+		return makePromise(fs.lstat, target).then(function(stat){
 			stat.target = target
 			stat.linkPath = target.replace(processPath, "")
 			stat.displayPath = path
@@ -61,6 +61,12 @@ async function renderFsListing(targetPath){
 				<a class="fs-file-item" href="${stat.linkPath}" target="_blank">${stat.displayPath}</a>
 			</div>`
 		}
+        else {
+            return `
+            <div>
+                ? ${stat.displayPath}
+            </div>`
+        }
 	}).join("")
 }
 
