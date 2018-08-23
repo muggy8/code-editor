@@ -16,13 +16,17 @@ main {
 #project-tree {
 	background-color: #EEE;
 	padding: 0.5em;
+    overflow: auto;
+    overflow-x: initial;
+    overflow-y: auto;
+    font-family: monospace;
 }
 
 .fs-file-item, .fs-directory-item {
 	display: block;
 }
 .fs-file-item::before {
-	content: "> "
+	content: "\25A2 ";
 }
 .fs-directory-item+*{
 	display: none;
@@ -31,8 +35,8 @@ main {
 	display: block;
 }
 .fs-directory-item::before {
-	content: "+ "
+	content: "\25BA ";
 }
 .fs-directory-item.active::before {
-	content: "- "
+	content: "\25BC ";
 }
