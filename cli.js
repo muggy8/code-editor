@@ -51,8 +51,8 @@ async function renderFsListing(targetPath){
 			var randomNumber = Math.round(Math.random() * 1000000)
 			return `
 			<div>
-				<a class="fs-directory-item" href="${stat.linkPath}" target="_${randomNumber}" onclick="event.preventDefault(); toggleList(this.href, this.target, this)">${stat.displayPath}</a>
-				<div style="padding-left: 1em" id="_${randomNumber}"></div>
+				<a class="fs-directory-item" href="${stat.linkPath}" target="fs_dir_${randomNumber}" onclick="event.preventDefault(); toggleList(this.href, this.target, this)">${stat.displayPath}</a>
+				<div style="padding-left: 1em" id="fs_dir_${randomNumber}"></div>
 			</div>`
 		}
 		else if (stat.isFile()){
