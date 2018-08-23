@@ -141,7 +141,7 @@ function getBody(req){
 
 var server = http.createServer(async function(req, res){
 
-	console.log("new request", req.method, req.url)
+	// console.log("new request", req.method, req.url)
 	var parsedUrl = url.parse(req.url)
 
 	if (req.method === "GET"){
@@ -154,7 +154,7 @@ var server = http.createServer(async function(req, res){
 	}
 	else if (req.method === "PUT"){
 		try{
-			console.log(processPath + parsedUrl.pathname)
+			// console.log(processPath + parsedUrl.pathname)
 			await makePromise(fs.writeFile, processPath + parsedUrl.pathname, await getBody(req))
 			res.writeHead(204)
 			res.end()
