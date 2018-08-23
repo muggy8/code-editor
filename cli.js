@@ -121,18 +121,44 @@ async function getAssets(req, res){
 	res.end()
 }
 
-var server = http.createServer(function(req, res){
+function getBody(req){
+	return new Promise(function(accept){
+		var payload = ""
+		req.on("data", function(chunk){
+			payload += chunk.toString()
+		})
+		req.on('end', function(){
+			accept(payload)
+	    });
+	})
+}
 
-	console.log("new request", req.url)
+var server = http.createServer(async function(req, res){
+
+	console.log("new request", req.method, req.url)
+	var parsedUrl = url.parse(req.url)
 
 	if (req.method === "GET"){
-		var parsedUrl = url.parse(req.url)
 		if (parsedUrl.pathname && parsedUrl.pathname.substring(0, 3) === "/@/") {
 			return getAssets(req, res)
 		}
 		else {
 			return onGet(req, res)
 		}
+	}
+	else if (req.method === "PUT"){
+		try{
+			console.log(processPath + parsedUrl.pathname)
+			await makePromise(fs.writeFile, processPath + parsedUrl.pathname, await getBody(req))
+			res.writeHead(204)
+			res.end()
+		}
+		catch(o3o){
+			res.writeHead(400, { 'Content-Type': 'text/plain' })
+			res.write("Failed to save file: " + o3o.toString())
+			res.end()
+		}
+
 	}
 })
 
