@@ -71,7 +71,7 @@ async function onGet(req, res){
 	}
 
 	var content = "",
-		editorPage = await makePromise(fs.readFile, "./gui.html", "utf8")
+		editorPage = await makePromise(fs.readFile, __dirname + "/gui.html", "utf8")
 	try{
 		var stats = await makePromise(fs.stat, processPath + parsedUrl.pathname)
 		if (stats.isFile()){
@@ -106,7 +106,7 @@ async function onGet(req, res){
 async function getAssets(req, res){
 	var parsedUrl = url.parse(req.url)
 	try{
-		var asset = await makePromise(fs.readFile, parsedUrl.pathname.replace(/^\/@\//, "./"), "utf8");
+		var asset = await makePromise(fs.readFile, parsedUrl.pathname.replace(/^\/@\//, __dirname + "/"), "utf8");
 	}
 	catch (o3o){
 		res.writeHead(404, { 'Content-Type': 'text/plain' })
