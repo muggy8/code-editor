@@ -51,8 +51,8 @@ async function renderFsListing(targetPath){
 			var randomNumber = Math.round(Math.random() * 1000000)
 			return `
 			<div>
-				<a class="fs-directory-item" href="${stat.linkPath}" target="_${randomNumber}" onclick="event.preventDefault(); toggleList(this.href, this.target)">${stat.displayPath}</a>
-				<div style="padding-left: 1rm" id="_${randomNumber}"></div>
+				<a class="fs-directory-item" href="${stat.linkPath}" target="_${randomNumber}" onclick="event.preventDefault(); toggleList(this.href, this.target, this)">${stat.displayPath}</a>
+				<div style="padding-left: 1em" id="_${randomNumber}"></div>
 			</div>`
 		}
 		else if (stat.isFile()){
@@ -90,7 +90,7 @@ async function onGet(req, res){
 
 
 	if (requestQuery && requestQuery.list){
-		// editorPage = editorFile
+		editorPage = await renderFsListing(processPath + parsedUrl.pathname.replace(/\/$/, ""))
 	}
 	else {
 		editorPage = editorPage.replace(/(<div id\=\"editor\">)(<\/div>)/, function(matched, open, closed){
@@ -103,10 +103,10 @@ async function onGet(req, res){
 	res.end()
 }
 
-async function getNodeModule(req, res){
+async function getAssets(req, res){
 	var parsedUrl = url.parse(req.url)
 	try{
-		var asset = await makePromise(fs.readFile, parsedUrl.pathname.replace(/^\/@\//, "./node_modules/"), "utf8");
+		var asset = await makePromise(fs.readFile, parsedUrl.pathname.replace(/^\/@\//, "./"), "utf8");
 	}
 	catch (o3o){
 		res.writeHead(404, { 'Content-Type': 'text/plain' })
@@ -128,7 +128,7 @@ var server = http.createServer(function(req, res){
 	if (req.method === "GET"){
 		var parsedUrl = url.parse(req.url)
 		if (parsedUrl.pathname && parsedUrl.pathname.substring(0, 3) === "/@/") {
-			return getNodeModule(req, res)
+			return getAssets(req, res)
 		}
 		else {
 			return onGet(req, res)

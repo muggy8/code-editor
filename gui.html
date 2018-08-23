@@ -1,24 +1,8 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<script src="@/ace-builds/src-min-noconflict/ace.js"></script>
-		<style>
-			html, body, main {
-				width: 100%;
-				height: 100%;'
-				padding: 0;
-				margin: 0;
-			}
-			main {
-				display: flex;
-			}
-			#editor, #project-tree {
-				height: 100%;
-			}
-			#editor {
-				flex-grow: 1;
-			}
-		</style>
+		<script src="/@/node_modules/ace-builds/src-min-noconflict/ace.js"></script>
+		<link href="/@/styles.css" rel="stylesheet" type="text/css">
 	</head>
 	<body>
 		<main>
@@ -27,11 +11,7 @@
 				<!--TREE-->
 			</nav>
 		</main>
-		<script>
-			ace.config.set('basePath', '@/ace-builds/src-min-noconflict')
-			var editor = ace.edit("editor")
-			editor.setTheme("ace/theme/textmate");
-	    	document.body.dataset.contentType && editor.session.setMode("ace/mode/" + document.body.dataset.contentType);
-		</script>
+		<script src="/@/config.js"></script>
+		<script src="/@/main.js"></script>
 	</body>
 </html>
