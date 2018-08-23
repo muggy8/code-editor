@@ -31,6 +31,39 @@ function makePromise(called){
 	})
 }
 
+async function renderFsListing(targetPath){
+	var fsList = await makePromise(fs.readdir, targetPath)
+	fsList = fsList.filter(function(path){
+		return path[0] !== "."
+	})
+	fsListStats = await Promise.all(fsList.map(function(path){
+		var target = targetPath + "/" + path
+		return makePromise(fs.stat, target).then(function(stat){
+			stat.target = target
+			stat.linkPath = target.replace(processPath, "")
+			stat.displayPath = path
+			return stat
+		})
+	}))
+
+	return fsListStats.map(function(stat){
+		if (stat.isDirectory()){
+			var randomNumber = Math.round(Math.random() * 1000000)
+			return `
+			<div>
+				<a class="fs-directory-item" href="${stat.linkPath}" target="_${randomNumber}" onclick="event.preventDefault(); toggleList(this.href, this.target)">${stat.displayPath}</a>
+				<div style="padding-left: 1rm" id="_${randomNumber}"></div>
+			</div>`
+		}
+		else if (stat.isFile()){
+			return `
+			<div>
+				<a class="fs-file-item" href="${stat.linkPath}" target="_blank">${stat.displayPath}</a>
+			</div>`
+		}
+	}).join("")
+}
+
 async function onGet(req, res){
 	var parsedUrl = url.parse(req.url)
 	if (parsedUrl.query){
@@ -63,6 +96,8 @@ async function onGet(req, res){
 		editorPage = editorPage.replace(/(<div id\=\"editor\">)(<\/div>)/, function(matched, open, closed){
 			return open + content + closed
 		})
+
+		editorPage = editorPage.replace("<!--TREE-->", await renderFsListing(processPath))
 	}
 	res.write(editorPage)
 	res.end()
