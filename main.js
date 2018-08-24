@@ -16,6 +16,9 @@ function toggleList(getPath, targetId, self){
 
 void function(){
     var editor = ace.edit("editor")
+    var titleEle = document.head.appendChild(document.createElement("title"))
+    titleEle.innerHTML = document.location.pathname.replace(/\/?[^\/]+\//g, "")
+
     document.addEventListener("keydown", function(event) {
     	if (event.keyCode == 83 && (navigator.platform.match("Mac") ? event.metaKey : event.ctrlKey)) {
     		event.preventDefault()
@@ -25,9 +28,20 @@ void function(){
     		xhr.addEventListener("error", function(){
     			alert(xhr.responseText)
     		})
+    		xhr.addEventListener("load", function(){
+    			if (xhr.status < 400 && xhr.status >= 200){
+                    if (titleEle.innerHTML[0] === '*') {
+                        titleEle.innerHTML = titleEle.innerHTML.replace("*", "")
+                    }
+                }
+    		})
     		xhr.send(editor.getValue())
     	}
     })
 
-    document.head.appendChild(document.createElement("title")).innerHTML = document.location.pathname.replace(/\/?[^\/]*\//g, "")
+    document.addEventListener("keyup", function(event) {
+        if (titleEle.innerHTML[0] !== '*') {
+            titleEle.innerHTML = titleEle.innerHTML + "*"
+        }
+    })
 }()
