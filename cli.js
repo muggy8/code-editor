@@ -140,6 +140,11 @@ function getBody(req){
 }
 
 var server = http.createServer(async function(req, res){
+    if (!(req.ip === '127.0.0.1' || req.ip === server.address.address)) {
+        res.writeHead(403, { 'Content-Type': 'text/plain' })
+		res.write("403 Local Requests Only")
+		res.end()
+    }
 
 	// console.log("new request", req.method, req.url)
 	var parsedUrl = url.parse(req.url)
