@@ -7,13 +7,13 @@ html, body, main {
 main {
 	display: flex;
 }
-#editor, #project-tree {
-	height: 100%;
-}
 #editor {
+    height: 100%;
 	flex-grow: 1;
 }
 #project-tree {
+    height: 100%;
+    box-sizing: border-box;
 	background-color: #EEE;
 	padding: 0.5em;
     overflow: auto;
