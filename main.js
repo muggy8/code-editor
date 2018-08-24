@@ -29,5 +29,5 @@ void function(){
     	}
     })
 
-    document.head.appendChild(document.createElement("title")).innerHTML = document.location.pathname.replace(/\/[^\/]*\//, "")
+    document.head.appendChild(document.createElement("title")).innerHTML = document.location.pathname.replace(/\/?[^\/]*\//g, "")
 }()
