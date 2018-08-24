@@ -1,6 +1,6 @@
 {
     "name": "@muggy8/code-editor",
-    "version": "0.0.4",
+    "version": "0.0.5",
     "description": "a Node based web code editor for those who are looking to wite code using a GUI but do not have many options because of compatibility or other reasons",
     "main": "cli.js",
     "scripts": {
